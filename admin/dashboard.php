@@ -14,45 +14,55 @@ if (!isset($_SESSION['admin_id'])) {
     <title>Admin Dashboard</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2f3, #8e9eab);
             margin: 0;
             padding: 0;
         }
 
         .container {
-            width: 60%;
-            margin: 50px auto;
+            width: 80%;
+            max-width: 900px;
+            margin: 80px auto;
             background-color: #fff;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            text-align: center;
         }
 
         h2 {
-            text-align: center;
             color: #333;
+            font-size: 28px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4CAF50;
+            display: inline-block;
+            padding-bottom: 10px;
         }
 
         nav {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
         }
 
         nav a {
             text-decoration: none;
-            padding: 12px 25px;
+            padding: 14px 30px;
             background-color: #4CAF50;
             color: white;
-            font-size: 16px;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         nav a:hover {
-            background-color: #45a049;
+            background-color: #43a047;
+            transform: translateY(-3px);
         }
 
         .logout {
@@ -67,9 +77,8 @@ if (!isset($_SESSION['admin_id'])) {
             text-align: center;
             margin-top: 50px;
             font-size: 14px;
-            color: #777;
+            color: #555;
         }
-
     </style>
 </head>
 <body>
@@ -83,7 +92,7 @@ if (!isset($_SESSION['admin_id'])) {
     </div>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Admin Dashboard</p>
+        <p>&copy; <?php echo date("Y"); ?> Admin Dashboard | Designed with ❤️</p>
     </footer>
 </body>
 </html>

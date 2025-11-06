@@ -3,11 +3,12 @@ include('../includes/db.php');  // Database connection
 session_start();
 
 if (isset($_POST['register'])) {
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $role = 'user'; // Default role for users
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $role = $_POST['role']; // role selected by user
 
-    // Check if the email already exists
+    // Check if email already exists
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -16,12 +17,15 @@ if (isset($_POST['register'])) {
         echo "<script>alert('Email is already registered!');</script>";
     } else {
         // Insert new user
-        $stmt = $conn->prepare("INSERT INTO users (email, password, role) VALUES (?, ?, ?)");
-        $stmt->execute([$email, $password, $role]);
+        $stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$username, $email, $password, $role]);
 
-        // Log the user in after successful registration
+        // Log in user automatically after registration
         $_SESSION['user_id'] = $conn->lastInsertId();
-        header("Location: ../index.php"); // Redirect to the homepage
+        $_SESSION['role'] = $role;
+        $_SESSION['username'] = $username;
+
+        header("Location: ../index.php"); // Redirect to homepage
         exit();
     }
 }
@@ -61,8 +65,10 @@ if (isset($_POST['register'])) {
             margin-bottom: 5px;
             display: block;
         }
+        input[type="text"],
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -73,7 +79,7 @@ if (isset($_POST['register'])) {
         button {
             width: 100%;
             padding: 12px;
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             font-size: 1.1em;
             border: none;
@@ -82,7 +88,7 @@ if (isset($_POST['register'])) {
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
         .error-message {
             color: #e74c3c;
@@ -96,10 +102,21 @@ if (isset($_POST['register'])) {
     <div class="register-container">
         <h2>Register</h2>
         <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+
             <label>Email:</label>
             <input type="email" name="email" required>
+
             <label>Password:</label>
             <input type="password" name="password" required>
+
+            <label>Role:</label>
+            <select name="role" required>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+
             <button type="submit" name="register">Register</button>
         </form>
         <?php if (isset($error_message)): ?>
